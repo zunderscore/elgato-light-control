@@ -1,7 +1,7 @@
 # @zunderscore/elgato-light-control
 Javascript wrapper for Elgato Key Lights and Light Strip control
 
-Based on **elgato-light-api** by NickParks ([https://github.com/NickParks/elgato-light-api])
+Based on **elgato-light-api** by NickParks (https://github.com/NickParks/elgato-light-api)
 
 ## Installation
 
