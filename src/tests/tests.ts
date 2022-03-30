@@ -9,10 +9,12 @@ const lightStripController = new ElgatoLightStripController();
 async function start() {
     keyLightController.on('newKeyLight', (newKeyLight: KeyLight) => {
         console.log('New Key Light: ' + newKeyLight.name);
+        console.log(newKeyLight);
     });
     
     lightStripController.on('newLightStrip', (newLightStrip: LightStrip) => {
         console.log('New Light Strip: ' + newLightStrip.name);
+        console.log(newLightStrip);
     });
 
     setTimeout(() => {

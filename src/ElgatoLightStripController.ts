@@ -41,13 +41,13 @@ export class ElgatoLightStripController extends EventEmitter {
         try {
             //Get the Light Strip's settings, info, and current options
             let settings = await axios.get(`http://${lightStrip.ip}:${lightStrip.port}/elgato/lights/settings`);
-            lightStrip.settings = settings;
+            lightStrip.settings = settings.data;
 
             let accessoryInfo = await axios.get(`http://${lightStrip.ip}:${lightStrip.port}/elgato/accessory-info`);
-            lightStrip.info = accessoryInfo;
+            lightStrip.info = accessoryInfo.data;
 
             let options = await axios.get(`http://${lightStrip.ip}:${lightStrip.port}/elgato/lights`);
-            lightStrip.options = options;
+            lightStrip.options = options.data;
 
             //Push the Light Strip to our array and emit the event
             this.lightStrips.push(lightStrip);

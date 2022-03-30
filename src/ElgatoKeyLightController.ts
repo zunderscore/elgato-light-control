@@ -41,13 +41,13 @@ export class ElgatoKeyLightController extends EventEmitter {
         try {
             //Grab our Key Light's settings, info, and current options
             let settingsCall = await axios.get(`http://${keyLight.ip}:${keyLight.port}/elgato/lights/settings`);
-            keyLight.settings = settingsCall;
+            keyLight.settings = settingsCall.data;
 
             let infoCall = await axios.get(`http://${keyLight.ip}:${keyLight.port}/elgato/accessory-info`);
-            keyLight.info = infoCall;
+            keyLight.info = infoCall.data;
 
             let optionsCall = await axios.get(`http://${keyLight.ip}:${keyLight.port}/elgato/lights`);
-            keyLight.options = optionsCall;
+            keyLight.options = optionsCall.data;
 
             //Push the Key Light to our array and emit the event
             this.keyLights.push(keyLight);
