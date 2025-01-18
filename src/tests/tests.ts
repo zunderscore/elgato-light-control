@@ -17,7 +17,7 @@ async function start() {
         console.log(newLightStrip);
     });
 
-    setTimeout(() => {
+    setInterval(() => {
         keyLightController.updateAllLights({
             numberOfLights: 1,
             lights: [{

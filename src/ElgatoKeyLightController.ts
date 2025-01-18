@@ -2,8 +2,6 @@ import { Bonjour } from "bonjour-service";
 import { EventEmitter } from "events";
 import { KeyLight, KeyLightOptions } from "./types/KeyLight";
 
-const axios = require('axios').default;
-
 export class ElgatoKeyLightController extends EventEmitter {
     public keyLights: Array<KeyLight>;
 
@@ -40,14 +38,14 @@ export class ElgatoKeyLightController extends EventEmitter {
     private async addKeylight(keyLight: KeyLight) {
         try {
             //Grab our Key Light's settings, info, and current options
-            let settingsCall = await axios.get(`http://${keyLight.ip}:${keyLight.port}/elgato/lights/settings`);
-            keyLight.settings = settingsCall.data;
+            let settingsCall = await fetch(`http://${keyLight.ip}:${keyLight.port}/elgato/lights/settings`);
+            keyLight.settings = await settingsCall.json();
 
-            let infoCall = await axios.get(`http://${keyLight.ip}:${keyLight.port}/elgato/accessory-info`);
-            keyLight.info = infoCall.data;
+            let infoCall = await fetch(`http://${keyLight.ip}:${keyLight.port}/elgato/accessory-info`);
+            keyLight.info = await infoCall.json();
 
-            let optionsCall = await axios.get(`http://${keyLight.ip}:${keyLight.port}/elgato/lights`);
-            keyLight.options = optionsCall.data;
+            let optionsCall = await fetch(`http://${keyLight.ip}:${keyLight.port}/elgato/lights`);
+            keyLight.options = await optionsCall.json();
 
             //Push the Key Light to our array and emit the event
             this.keyLights.push(keyLight);
@@ -69,7 +67,10 @@ export class ElgatoKeyLightController extends EventEmitter {
         return new Promise(async (resolve, reject) => {
             light.options = options;
             try {
-                await axios.put(`http://${light.ip}:${light.port}/elgato/lights`, options);
+                await fetch(`http://${light.ip}:${light.port}/elgato/lights`, {
+                    method: "PUT",
+                    body: JSON.stringify(options)
+                });
                 return resolve();
             } catch (e) {
                 return reject(e);

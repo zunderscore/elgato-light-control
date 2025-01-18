@@ -2,8 +2,6 @@ import { Bonjour } from "bonjour-service";
 import { EventEmitter } from "events";
 import { LightStrip, LightStripOptions } from "./types/LightStrip";
 
-const axios = require('axios').default;
-
 export class ElgatoLightStripController extends EventEmitter {
     public lightStrips: Array<LightStrip>;
 
@@ -40,14 +38,14 @@ export class ElgatoLightStripController extends EventEmitter {
     private async addLightstrip(lightStrip: LightStrip) {
         try {
             //Get the Light Strip's settings, info, and current options
-            let settings = await axios.get(`http://${lightStrip.ip}:${lightStrip.port}/elgato/lights/settings`);
-            lightStrip.settings = settings.data;
+            let settings = await fetch(`http://${lightStrip.ip}:${lightStrip.port}/elgato/lights/settings`);
+            lightStrip.settings = await settings.json();
 
-            let accessoryInfo = await axios.get(`http://${lightStrip.ip}:${lightStrip.port}/elgato/accessory-info`);
-            lightStrip.info = accessoryInfo.data;
+            let accessoryInfo = await fetch(`http://${lightStrip.ip}:${lightStrip.port}/elgato/accessory-info`);
+            lightStrip.info = await accessoryInfo.json();
 
-            let options = await axios.get(`http://${lightStrip.ip}:${lightStrip.port}/elgato/lights`);
-            lightStrip.options = options.data;
+            let options = await fetch(`http://${lightStrip.ip}:${lightStrip.port}/elgato/lights`);
+            lightStrip.options = await options.json();
 
             //Push the Light Strip to our array and emit the event
             this.lightStrips.push(lightStrip);
@@ -69,7 +67,10 @@ export class ElgatoLightStripController extends EventEmitter {
         return new Promise(async (resolve, reject) => {
             light.options = options;
             try {
-                await axios.put(`http://${light.ip}:${light.port}/elgato/lights`, options);
+                await fetch(`http://${light.ip}:${light.port}/elgato/lights`, {
+                    method: "PUT",
+                    body: JSON.stringify(options)
+                });
                 return resolve();
             } catch (e) {
                 return reject(e);
